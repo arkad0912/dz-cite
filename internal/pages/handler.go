@@ -7,12 +7,20 @@ type PagesHandler struct {
 }
 
 //1
-func NewPagesHandler(router fiber.Router) {
+func NewPagesHandler(router fiber.Router) *PagesHandler {
 	h := &PagesHandler{
 		router: router,
 	}
 
-	router.Get("/api", h.HomePagesHandler)
+	h.registerRoutes()
+	return h
+}
+
+func (h *PagesHandler) registerRoutes() {
+
+	api := h.router.Group("/api")
+
+	api.Get("/", h.HomePagesHandler)
 
 }
 
