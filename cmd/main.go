@@ -22,7 +22,8 @@ func main() {
 
 	app.Use(recover.New()) //мидлвейр, обрабатывает ошибки
 
-	pages.NewPagesHandler(app)
+	//pages.NewPagesHandler(app)
+	app.Get("/", pages.Handler) // Обработчик для корневого пути
 
 	app.Listen(":3000")
 }

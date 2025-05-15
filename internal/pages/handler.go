@@ -2,21 +2,33 @@ package pages
 
 import "github.com/gofiber/fiber/v2"
 
-type PagesHandler struct {
-	router fiber.Router
-}
+// type PagesHandler struct {
+// 	router fiber.Router
+// }
 
-func NewPagesHandler(router fiber.Router) {
-	h := &PagesHandler{
-		router: router,
-	}
+// //1
+// func NewPagesHandler(router fiber.Router) *PagesHandler {
+// 	h := &PagesHandler{
+// 		router: router,
+// 	}
 
-	router.Get("/api", h.HomePagesHandler)
+// 	h.registerRoutes()
+// 	return h
+// }
 
-}
+// func (h *PagesHandler) registerRoutes() {
 
-func (h *PagesHandler) HomePagesHandler(c *fiber.Ctx) error {
-	return c.JSON(fiber.Map{
-		"message": "Home pages",
-	})
+// 	api := h.router.Group("/api")
+
+// 	api.Get("/", h.HomePagesHandler)
+
+// }
+
+// func (h *PagesHandler) HomePagesHandler(c *fiber.Ctx) error {
+// 	return c.JSON(fiber.Map{
+// 		"message": "Home pages",
+// 	})
+// }
+func Handler(c *fiber.Ctx) error {
+	return c.SendString("Hello, World!")
 }
