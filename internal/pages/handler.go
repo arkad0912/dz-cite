@@ -1,4 +1,3 @@
-// internal/pages/handler.go
 package pages
 
 import (
@@ -17,7 +16,7 @@ func NewHandler(logger *slog.Logger) *Handler {
 
 func (h *Handler) Home(c *fiber.Ctx) error {
 	h.logger.Info("Handling home request")
-	return c.SendString("Hello, World!")
+	return c.SendString("Hello, World!") // Явный возврат значения
 }
 
 func SetupRoutes(app *fiber.App, logger *slog.Logger) {
