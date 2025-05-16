@@ -11,23 +11,36 @@ import (
 	slogfiber "github.com/samber/slog-fiber"
 )
 
-func main() {
-	//инициализация конфига
-	config.Init()
+func setupLogger() *slog.Logger {
+	return slog.New(
+		slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		}),
+	)
+}
 
-	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
-
-	// Создание Fiber приложения
+func setupApp(logger *slog.Logger) *fiber.App {
 	app := fiber.New()
 
-	// Подключение middleware
+	// Middleware в правильном порядке
+	app.Use(recover.New())
+	app.Use(slogfiber.New(logger))
 
-	app.Use(slogfiber.New(logger)) // Логирование запросов
+	// Инициализация роутов
+	pages.SetupRoutes(app, logger)
 
-	app.Use(recover.New()) // Мидлвейр, обрабатывающий ошибки
+	return app
+}
 
-	//pages.NewPagesHandler(app)
-	app.Get("/", pages.Handler) // Обработчик для корневого пути
+func main() {
+	// Инициализация конфигурации
+	config.Init()
+
+	// Настройка логгера
+	logger := setupLogger()
+
+	// Создание приложения
+	app := setupApp(logger)
 
 	app.Listen(":3000")
 }
