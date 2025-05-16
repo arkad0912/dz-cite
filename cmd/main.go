@@ -3,7 +3,6 @@ package main
 import (
 	"dz/config"
 	"dz/internal/pages"
-	"log"
 	"log/slog"
 	"os"
 
@@ -15,8 +14,7 @@ import (
 func main() {
 	//инициализация конфига
 	config.Init()
-	dbConf := config.NewDatabaseConfig()
-	log.Println(dbConf)
+
 	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
 
 	// Создание Fiber приложения
