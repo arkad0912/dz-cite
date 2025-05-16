@@ -15,16 +15,18 @@ import (
 func main() {
 	//инициализация конфига
 	config.Init()
-	logger := slog.New(slog.NewTextHandler(os.Stdout, nil))
 	dbConf := config.NewDatabaseConfig()
 	log.Println(dbConf)
+	logger := slog.New(slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{}))
 
 	// Создание Fiber приложения
 	app := fiber.New()
 
 	// Подключение middleware
-	app.Use(recover.New())         // Мидлвейр, обрабатывающий ошибки
+
 	app.Use(slogfiber.New(logger)) // Логирование запросов
+
+	app.Use(recover.New()) // Мидлвейр, обрабатывающий ошибки
 
 	//pages.NewPagesHandler(app)
 	app.Get("/", pages.Handler) // Обработчик для корневого пути
