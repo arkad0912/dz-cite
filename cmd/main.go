@@ -3,27 +3,43 @@ package main
 import (
 	"dz/config"
 	"dz/internal/pages"
-	"log"
+	"log/slog"
+	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	slogfiber "github.com/samber/slog-fiber"
 )
 
-func main() {
-	//инициализация конфига
-	config.Init()
-	dbConf := config.NewDatabaseConfig()
-	log.Println(dbConf)
+func setupLogger() *slog.Logger {
+	return slog.New(
+		slog.NewTextHandler(os.Stdout, &slog.HandlerOptions{
+			Level: slog.LevelDebug,
+		}),
+	)
+}
 
-	//Создание Fiber
+func setupApp(logger *slog.Logger) *fiber.App {
 	app := fiber.New()
 
-	//Инициализация
+	// Middleware в правильном порядке
+	app.Use(recover.New())
+	app.Use(slogfiber.New(logger))
 
-	app.Use(recover.New()) //мидлвейр, обрабатывает ошибки
+	// Инициализация роутов
+	pages.SetupRoutes(app, logger)
 
-	//pages.NewPagesHandler(app)
-	app.Get("/", pages.Handler) // Обработчик для корневого пути
+	return app
+}
 
+func main() {
+	// Инициализация конфигурации
+	config.Init()
+
+	// Настройка логгера
+	logger := setupLogger()
+
+	// Создание приложения
+	app := setupApp(logger)
 	app.Listen(":3000")
 }
