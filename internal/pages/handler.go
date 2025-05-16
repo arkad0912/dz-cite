@@ -1,7 +1,9 @@
+// internal/pages/handler.go
 package pages
 
 import (
 	"log/slog"
+
 	"github.com/gofiber/fiber/v2"
 )
 
@@ -22,4 +24,3 @@ func SetupRoutes(app *fiber.App, logger *slog.Logger) {
 	h := NewHandler(logger)
 	app.Get("/", h.Home)
 }
-go

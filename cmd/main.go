@@ -41,6 +41,5 @@ func main() {
 
 	// Создание приложения
 	app := setupApp(logger)
-
 	app.Listen(":3000")
 }
